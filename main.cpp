@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <python3.10/Python.h>
+
+// Use opencv to do image handling
 
 std::string read_file(std::string filename)
 {
