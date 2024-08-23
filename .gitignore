@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Custom
+*.jpg
+*.png
+*.webp
+main
+*.json
+*.txt
