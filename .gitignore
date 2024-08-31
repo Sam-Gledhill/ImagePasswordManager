@@ -38,3 +38,4 @@
 main
 *.json
 *.txt
+run.sh
