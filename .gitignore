@@ -33,6 +33,7 @@
 
 # Custom
 *.jpg
+*.jpeg
 *.png
 *.webp
 main

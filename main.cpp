@@ -6,6 +6,11 @@
 
 // Use opencv to do image handling
 
+//TODO: Features
+//Store and retrieve data from  
+//Work out how to read and write rgb image data from pngs etc: opencv
+
+
 std::string read_file(std::string filename)
 {
     std::string s = "";
