@@ -69,34 +69,38 @@ void display_image(cv::Mat &img){
     cv::waitKey(0);
 }
 
-void encode_secret(std::string img_path, std::string secret){
+void encode_secret(std::string img_path, std::string secret, std::string password){
     // Encodes secret into image - saves image as encoded_image.png
     //Reads the image as r,g,b and converts to r,g,b,a - sets alpha value to 255
     cv::Mat image = cv::imread(img_path,
                                cv::IMREAD_COLOR);
     cv::cvtColor(image, image, cv::COLOR_RGB2RGBA);
 
-    write_secret_to_image(image, secret);
+    //Encrypt secret with viginere algorithm for added security
+    std::string encrypted_secret = viginere_encrypt(secret,password);
+    write_secret_to_image(image, encrypted_secret);
 }
 
-std::string decode_secret(std::string img_path){
+std::string decode_secret(std::string img_path,std::string password){
 
     //Returns the secret string encoded in the image located at image path.
     //IMREAD_UNCHANGED preserves alpha channel value
     cv::Mat image = cv::imread(img_path,
                                cv::IMREAD_UNCHANGED);
 
-    return read_secret_from_image(image);
+    std::string encrypted_secret = read_secret_from_image(image);
+    return viginere_decrypt(encrypted_secret,password); 
 }
 
 int main(int argc, char *argv[])
 {
 
     std::string secret = "Hello world!";
+    std::string password = "shush";
+    
+    encode_secret("gy65o4mk3oe01.png",secret,password);
 
-    encode_secret("gy65o4mk3oe01.png",secret);
-
-    std::cout << decode_secret("encoded_image.png") << std::endl;
+    std::cout << decode_secret("encoded_image.png",password) << std::endl;
 
     return 0;
 }
