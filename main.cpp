@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     }
 
     else{
-        std::cout << "Cli arguments invalid. Should either be [img_path,secret,password] or [img_path,secret]" << std::endl;
+        std::cout << "Cli arguments invalid. Should either be to encrypt(img_path,secret,password) or decrypt([img_path,secret])" << std::endl;
         return -1;
     }
 }
