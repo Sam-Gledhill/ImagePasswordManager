@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include "encrypt.hpp"
 #include <opencv4/opencv2/opencv.hpp>
 #include <opencv4/opencv2/imgcodecs.hpp>
 
@@ -91,7 +92,7 @@ std::string decode_secret(std::string img_path){
 int main(int argc, char *argv[])
 {
 
-    std::string secret = "Lorem ipsum dolor alamet fjldsjfkldsjfkldsjfklsdfkdslfjvncmvnxcjwijldjf0-r03940-1932090149-0+_+_+!{];'#,./<>?}";
+    std::string secret = "Hello world!";
 
     encode_secret("gy65o4mk3oe01.png",secret);
 
