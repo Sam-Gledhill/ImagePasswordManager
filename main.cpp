@@ -94,15 +94,26 @@ std::string decode_secret(std::string img_path,std::string password){
     return viginere_decrypt(encrypted_secret,password); 
 }
 
+//Store this password as a system-password-protected environment variable - like an ssh private key for github.
 int main(int argc, char *argv[])
 {
 
-    std::string secret = "Hello world!";
-    std::string password = "shush";
-    
-    encode_secret("gy65o4mk3oe01.png",secret,password);
+    if (argc == 4){
+        std::string img_path = argv[1];
+        std::string secret = argv[2];
+        std::string password = argv[3];
+        encode_secret(img_path, secret, password); 
+    }
 
-    std::cout << decode_secret("encoded_image.png",password) << std::endl;
+    else if (argc == 3){
+        std::string img_path = argv[1];
+        std::string password = argv[2]; 
+        std::cout << decode_secret(img_path,password) << std::endl;
+        return 0;
+    }
 
-    return 0;
+    else{
+        std::cout << "cli arguments invalid";
+        return -1;
+    }
 }
