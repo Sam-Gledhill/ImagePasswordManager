@@ -1,65 +1,36 @@
 #include <iostream>
-#include <fstream>
 #include <string>
+#include <stdexcept>
 #include <opencv4/opencv2/opencv.hpp>
 #include <opencv4/opencv2/imgcodecs.hpp>
-
-// Use opencv to do image handling
-
-//TODO: Features
-//Store and retrieve data from  
-//Work out how to read and write rgb image data from pngs etc: opencv
-
-
-std::string read_file(std::string filename)
-{
-    std::string s = "";
-    std::ifstream in(filename, std::ios::binary);
-    char c;
-    while (in)
-    {
-        in.get(c);
-        if (in)
-        {
-            s += int(c);
-        }
-    }
-    in.close();
-    return s;
-}
-
-void write_file(std::string filename, std::string data)
-{
-    std::ofstream out(filename);
-    out << data;
-    out.close();
-}
 
 void write_secret_to_image(cv::Mat image, std::string secret)
 {
     uint stringIndex = 0;
-
-    uchar pixValue;
     for (int i = 0; i < image.cols; i++)
     {
         for (int j = 0; j < image.rows; j++)
         {
             cv::Vec4b &intensity = image.at<cv::Vec4b>(j, i);
-
-            if (stringIndex == secret.length() - 1)
+            
+            if (stringIndex == secret.length())
             {
                 intensity.val[3] = 0; // have an alpha value of 0 be a null terminator
+                cv::imwrite("encoded_image.png",image);
+                return;
             }
-            intensity.val[3] -= (int)secret[stringIndex]; // Minus value from alpha - defaults is 255.
+            intensity.val[3] -= static_cast<int>(secret[stringIndex]); // Minus value from alpha - defaults is 255.
             stringIndex++;
         }
     }
+
+    throw std::length_error("Target image not large enough to store secret string");
+
 }
 
 std::string read_secret_from_image(cv::Mat image)
 {
     std::string secret = "";
-    uchar pixValue;
     for (int i = 0; i < image.cols; i++)
     {
         for (int j = 0; j < image.rows; j++)
@@ -70,41 +41,44 @@ std::string read_secret_from_image(cv::Mat image)
             {
                 return secret;
             }
-            secret += (uchar)(255 - intensity.val[3]); // Minus value from alpha - defaults is 255.
+            secret += static_cast<char>(255 - intensity.val[3]); // Minus value from alpha - defaults is 255.
         }
     }
     return secret;
 }
 
-int main(int argc, char *argv[])
-{
-    // if (argc != 3)
-    // {
-    //     return 0;
-    // }
-    // std::string main_file = read_file(argv[1]);
-    // std::string secret_file = read_file(argv[2]);
-    // size_t secret_position = 10000;
-    // main_file.replace(secret_position, 3, "Hello World!");
-    // std::string embedded_filename = "output.png";
-    // write_file(embedded_filename, main_file);
 
-    cv::Mat image = cv::imread("pr5ded8pqr0b1.png",
+void display_image(cv::Mat &img){
+
+    cv::Mat copyImage;
+    cv::resize(img,copyImage,cv::Size{800,400});
+    cv::imshow("Title",copyImage);
+    cv::waitKey(0);
+}
+
+void encode_secret(std::string img_path, std::string secret){
+    
+    //Reads the image as r,g,b and converts to r,g,b,a - sets alpha value to 255
+    cv::Mat image = cv::imread(img_path,
+                               cv::IMREAD_COLOR);
+    cv::cvtColor(image, image, cv::COLOR_RGB2RGBA);
+
+    write_secret_to_image(image, secret);
+}
+
+std::string decode_secret(std::string img_path){
+    //Imread unchanged preserves alpha channel value
+    cv::Mat image = cv::imread(img_path,
                                cv::IMREAD_UNCHANGED);
 
-    // cv::cvtColor(image, image, cv::COLOR_RGB2RGBA);
+    return read_secret_from_image(image);
+}
 
-    // cv::Size resized{800, 400};
-    // cv::resize(image, image, resized);
-    // cv::imshow("Window", image);
+int main(int argc, char *argv[])
+{
+    encode_secret("gy65o4mk3oe01.png","Hello world!");
 
-    // write_secret_to_image(image, "Hello world!");
-
-    std::cout << read_secret_from_image(image) << std::endl;
-
-    cv::imwrite("output.png", image);
-
-    // cv::waitKey(0);
+    std::cout << decode_secret("encoded_image.png") << std::endl;
 
     return 0;
 }
