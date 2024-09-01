@@ -1,6 +1,7 @@
 #include "encrypt.hpp"
 
 //Add salting+hashing
+//Have it spit out garbage/no data if secret is wrong. Have processing time be as equivalent as possible.
 
 std::string viginere_encrypt(std::string secret, std::string password){
 
