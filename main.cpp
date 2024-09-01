@@ -4,8 +4,15 @@
 #include <opencv4/opencv2/opencv.hpp>
 #include <opencv4/opencv2/imgcodecs.hpp>
 
+//Todo:
+// Encrypt secret string
+// Do lossless compression?
+
 void write_secret_to_image(cv::Mat image, std::string secret)
 {
+    //Encodes secret string into the alpha channels of target image s.t char = 255-intensity.val[3].
+    //Saves encoded image as encoded_image.png
+
     uint stringIndex = 0;
     for (int i = 0; i < image.cols; i++)
     {
@@ -15,7 +22,8 @@ void write_secret_to_image(cv::Mat image, std::string secret)
             
             if (stringIndex == secret.length())
             {
-                intensity.val[3] = 0; // have an alpha value of 0 be a null terminator
+                //Insert a null terminator. Assumes no characters have ascii value of 255.
+                intensity.val[3] = 0; 
                 cv::imwrite("encoded_image.png",image);
                 return;
             }
@@ -30,6 +38,10 @@ void write_secret_to_image(cv::Mat image, std::string secret)
 
 std::string read_secret_from_image(cv::Mat image)
 {
+    //Extracts secret string from the alpha channels of target image s.t char = 255-intensity.val[3].
+    //Returns secret string from function.
+
+
     std::string secret = "";
     for (int i = 0; i < image.cols; i++)
     {
@@ -39,6 +51,7 @@ std::string read_secret_from_image(cv::Mat image)
 
             if (intensity.val[3] == 0)
             {
+                //When null terminator reached - exit function.
                 return secret;
             }
             secret += static_cast<char>(255 - intensity.val[3]); // Minus value from alpha - defaults is 255.
@@ -47,9 +60,8 @@ std::string read_secret_from_image(cv::Mat image)
     return secret;
 }
 
-
 void display_image(cv::Mat &img){
-
+    //Shows small version of image on the screen in a cv2 window. Debugging purposes.
     cv::Mat copyImage;
     cv::resize(img,copyImage,cv::Size{800,400});
     cv::imshow("Title",copyImage);
@@ -57,7 +69,7 @@ void display_image(cv::Mat &img){
 }
 
 void encode_secret(std::string img_path, std::string secret){
-    
+    // Encodes secret into image - saves image as encoded_image.png
     //Reads the image as r,g,b and converts to r,g,b,a - sets alpha value to 255
     cv::Mat image = cv::imread(img_path,
                                cv::IMREAD_COLOR);
@@ -67,7 +79,9 @@ void encode_secret(std::string img_path, std::string secret){
 }
 
 std::string decode_secret(std::string img_path){
-    //Imread unchanged preserves alpha channel value
+
+    //Returns the secret string encoded in the image located at image path.
+    //IMREAD_UNCHANGED preserves alpha channel value
     cv::Mat image = cv::imread(img_path,
                                cv::IMREAD_UNCHANGED);
 
@@ -76,7 +90,10 @@ std::string decode_secret(std::string img_path){
 
 int main(int argc, char *argv[])
 {
-    encode_secret("gy65o4mk3oe01.png","Hello world!");
+
+    std::string secret = "Lorem ipsum dolor alamet fjldsjfkldsjfkldsjfklsdfkdslfjvncmvnxcjwijldjf0-r03940-1932090149-0+_+_+!{];'#,./<>?}";
+
+    encode_secret("gy65o4mk3oe01.png",secret);
 
     std::cout << decode_secret("encoded_image.png") << std::endl;
 
