@@ -40,16 +40,3 @@ std::string viginere_decrypt(std::string secret, std::string password){
     
     return decryptedSecret;
 }
-
-
-int main(){
-
-    std::string secret = "Hello world!";
-    std::string password = "shush";
-    std::string encrypted_secret = viginere_encrypt(secret,password);
-    std::string decrypted_secret = viginere_decrypt(encrypted_secret,password);
-
-    std::cout << secret << "\n" << encrypted_secret << "\n" << decrypted_secret << std::endl;
-
-    return 0;
-}
