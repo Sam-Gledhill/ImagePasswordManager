@@ -8,6 +8,7 @@
 // Todo:
 //  Work on the security of the encryption algorithm
 //  Have offset to data in image defined by the key. Fill the rest of the image with junk data.
+//  Make cli arguments more fool-proof
 
 void write_secret_to_image(cv::Mat image, std::string image_dest, std::string secret)
 {
