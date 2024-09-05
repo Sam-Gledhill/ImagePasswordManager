@@ -6,12 +6,8 @@
 #include <opencv4/opencv2/imgcodecs.hpp>
 
 // Todo:
-//  Be able to define the destination image when encrypting data
-//  Add hashing & salting to encryption algorithm.
-//  Do lossless compression? More helpful for large datasets like encoding images.
-//  Have offset to data in image defined by the key. Fill the rest of the image with junk data. ?
-//  Add ability to encode images within the image that have the secret encoded within them.
-//  Store this password as a system-password-protected environment variable - like an ssh private key for github.
+//  Work on the security of the encryption algorithm
+//  Have offset to data in image defined by the key. Fill the rest of the image with junk data.
 
 void write_secret_to_image(cv::Mat image, std::string image_dest, std::string secret)
 {
