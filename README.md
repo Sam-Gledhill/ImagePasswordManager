@@ -21,7 +21,7 @@ password: Password to encrypt the string with.
 # Encryption
 Data is hidden by first encrypting the data using a viginere cipher, with the key generated from [password].
 
-The image located at [image_source] is read, and all alpha values are set to 255. The ascii value of the first character is subtracted from the alpha value of the first pixel. The next pixel in the image is then selected, and this process is repeated until the end of the secret is reached, where the alpha is set to 0 to denote a null terminator.
+The image located at [image_source] is read, and all alpha values are set to 255. The ascii value of the first character is subtracted from the alpha value of the first pixel. The next pixel in the image is then selected, and this process is repeated until the end of the secret is reached, where the alpha is set to 0 to act as a null terminator.
 
 ![Encryption Figure](EncryptionFigure.png)
 
