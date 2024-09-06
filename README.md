@@ -1,5 +1,7 @@
 # Image Password Manager - IPWM
 
+![IPWM FlowChart][IPWM.png]
+
 A prototype of a password manager that uses images to store user passwords.
 
 To encrypt: ./ipwm [image_source] [image_dest] [secret] [password]
