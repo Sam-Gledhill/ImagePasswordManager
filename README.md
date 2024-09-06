@@ -4,6 +4,8 @@ A prototype of a password manager that uses images to store user passwords.
 
 ![IPWM FlowChart](IPWM.png)
 
+Compile arguments: ```g++ main.cpp encrypt.cpp -o ipwm -I /usr/local/include/opencv4 -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs```
+
 To encrypt: ```./ipwm [image_source] [image_dest] [secret] [password]```
 
 To decrypt: ```./ipwm [encrypted_image] [password]```
