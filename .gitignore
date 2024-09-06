@@ -42,3 +42,4 @@ main
 encrypt
 ipwm
 *.py
+*.sh
