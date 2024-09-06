@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+# Prototype of the main c++ project in python - shows that it is possible to store small images inside of images
 
 import cv2 as cv
 import numpy as np
