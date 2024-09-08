@@ -40,3 +40,6 @@ main
 *.json
 *.txt
 encrypt
+ipwm
+*.py
+*.sh
