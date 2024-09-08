@@ -1,6 +1,6 @@
 # Image Password Manager - IPWM
 
-A prototype of a password manager that uses images to store user passwords.
+A prototype of a password manager that uses images to store user passwords/secrets.
 
 ![IPWM FlowChart](IPWM.png)
 
