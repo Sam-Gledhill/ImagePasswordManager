@@ -31,3 +31,10 @@ The image located at [image_source] is read, and all alpha values are set to 255
 The decryption is done in reverse. The pixels in the image are looped through, and their alpha values are subtracted from 255. The loop stops when the null terminator (alpha=0) is reached. This data is then decrypted using the password.
 
 In the current implementation the validity of the password is not tested, and the data is spat out as-is. This makes the current implementation extremely vulnerable as you can retrieve partial secrets.
+
+
+# Todo
+*  Add hashed+salted password to the image data so partial matches can't be made
+*  Create GUI alternative to CLI. Use WxWidgets,QT5, or make a Tkinter/JS interface.
+*  Make the client arguments more fool-proof. Add more checks.
+
