@@ -9,8 +9,88 @@
 //  Work on the security of the encryption algorithm
 //  Have offset to data in image defined by the key. Fill the rest of the image with junk data.
 //  Make cli arguments more fool-proof
+void write_hashed_password_to_image(cv::Mat image, std::string password){
+    std::hash<std::string> hash;
+    size_t hashedPword = hash(password);
 
-void write_secret_to_image(cv::Mat image, std::string image_dest, std::string secret)
+    std::string s = std::to_string(hashedPword);
+
+    uint stringIndex = 0;
+    uint offset = 0;
+
+    bool secretNullTermFound = false;
+
+    for (int i = 0; i < image.cols; i++)
+    {
+        for (int j = 0; j < image.rows; j++)
+        {
+            cv::Vec4b &intensity = image.at<cv::Vec4b>(j, i);
+
+            if (!secretNullTermFound){
+                if(intensity.val[3]==0){
+                    secretNullTermFound = true;
+                    offset++;
+                }
+                offset++;
+                continue;
+            }
+
+            if (stringIndex == s.length())
+            {
+                // Insert a null terminator. Assumes no characters have ascii value of 255.
+                intensity.val[3] = 0;
+                return;
+            }
+            intensity.val[3] -= static_cast<int>(s[offset + stringIndex]); // Minus value from alpha - defaults is 255.
+            stringIndex++;
+        }
+    }
+
+
+    throw std::length_error("Target image not large enough to store secret string");
+}
+
+void read_hashed_password_from_image(cv::Mat image, std::string password){
+    std::hash<std::string> hash;
+    size_t hashedPword = hash(password);
+
+    std::string s = std::to_string(hashedPword);
+
+    bool secretNullTermFound = false;
+    std::string storedHash = "";
+
+
+    std::string secret = "";
+    for (int i = 0; i < image.cols; i++)
+    {
+        for (int j = 0; j < image.rows; j++)
+        {
+            cv::Vec4b &intensity = image.at<cv::Vec4b>(j, i);
+
+            if(!secretNullTermFound){
+
+                if(intensity.val[3] == 0){
+                    secretNullTermFound = true;
+                }
+                continue;
+            }
+
+            if (intensity.val[3] == 0)
+            {
+                // When null terminator reached - exit function.
+                std::cout << storedHash << "\n" << hashedPword << std::endl;
+                return;
+            }
+            storedHash += static_cast<char>(255 - intensity.val[3]); // Minus value from alpha - defaults is 255.
+        }
+    }
+
+    throw std::invalid_argument(storedHash);
+
+}
+
+
+void write_secret_to_image(cv::Mat image, std::string image_dest, std::string secret, std::string password)
 {
     // Encodes secret string into the alpha channels of target image s.t char = 255-intensity.val[3].
     // Saves encoded image as encoded_image.png
@@ -27,6 +107,7 @@ void write_secret_to_image(cv::Mat image, std::string image_dest, std::string se
                 // Insert a null terminator. Assumes no characters have ascii value of 255.
                 intensity.val[3] = 0;
                 cv::imwrite(image_dest, image);
+                write_hashed_password_to_image(image,password);
                 return;
             }
             intensity.val[3] -= static_cast<int>(secret[stringIndex]); // Minus value from alpha - defaults is 255.
@@ -37,10 +118,12 @@ void write_secret_to_image(cv::Mat image, std::string image_dest, std::string se
     throw std::length_error("Target image not large enough to store secret string");
 }
 
-std::string read_secret_from_image(cv::Mat image)
+std::string read_secret_from_image(cv::Mat image, std::string password)
 {
     // Extracts secret string from the alpha channels of target image s.t char = 255-intensity.val[3].
     // Returns secret string from function.
+
+    read_hashed_password_from_image(image,password);
 
     std::string secret = "";
     for (int i = 0; i < image.cols; i++)
@@ -79,7 +162,7 @@ void encode_secret(std::string img_path, std::string img_dest, std::string secre
 
     // Encrypt secret with viginere algorithm for added security
     std::string encrypted_secret = viginere_encrypt(secret, password);
-    write_secret_to_image(image, img_dest, encrypted_secret);
+    write_secret_to_image(image, img_dest, encrypted_secret, password);
 }
 
 std::string decode_secret(std::string img_path, std::string password)
@@ -90,7 +173,7 @@ std::string decode_secret(std::string img_path, std::string password)
     cv::Mat image = cv::imread(img_path,
                                cv::IMREAD_UNCHANGED);
 
-    std::string encrypted_secret = read_secret_from_image(image);
+    std::string encrypted_secret = read_secret_from_image(image,password);
     return viginere_decrypt(encrypted_secret, password);
 }
 
