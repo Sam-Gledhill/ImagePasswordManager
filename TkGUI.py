@@ -15,7 +15,7 @@ class app(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
 
-        self.width, self.height = 1500, 150
+        self.width, self.height = 725, 150
 
         self.entry_padding = 200
 
@@ -83,38 +83,50 @@ class DecryptionPage(tk.Frame):
         self.controller = controller
 
         #Draw choose dest
-        choose_dest_label = tk.Label(self,text = "Choose Dest: ")
-        dest_entry_widget = tk.Entry(self)
+        dest_frame = tk.Frame(self)
+        choose_dest_label = tk.Label(dest_frame,text = "Choose Dest: ")
+        dest_entry_widget = tk.Entry(dest_frame)
         dest_entry_widget.insert(0,os.getcwd())
-        dest_explorer_button = tk.Button(self,text = "File", command=partial(controller.select_file,dest_entry_widget))
+        dest_explorer_button = tk.Button(dest_frame,text = "File", command=partial(controller.select_file,dest_entry_widget))
 
         choose_dest_label.grid(row = 0, column = 0, sticky = tk.W)
         dest_explorer_button.grid(row = 0, column = 1, sticky = tk.W)
         dest_entry_widget.grid(row = 0, column = 2, sticky = tk.W,ipadx=controller.entry_padding)
+        dest_frame.grid(row=0,column=0, sticky= tk.W)
 
         #Draw password entry
-        password_label = tk.Label(self,text = "Password: ")
-        password_entry = tk.Entry(self)
+
+        password_frame = tk.Frame(self)
+        password_label = tk.Label(password_frame,text = "Password: ")
+        password_entry = tk.Entry(password_frame)
         password_label.grid(row=1,column=0,sticky=tk.W)
-        password_entry.grid(row=1,column=1,sticky=tk.W,ipadx=controller.entry_padding)
+        password_entry.grid(row=1,column=1,sticky=tk.W)
+        password_frame.grid(row=1,column=0,sticky=tk.W)
 
 
-        encrypt_tab = tk.Button(self,text="Switch to encrypt",command=partial(self.controller.show_frame,"EncryptionPage"))
-        encrypt_tab.grid(row=2,column=1)
-
-        self.show_password_label = tk.Label(self,text = "PasswordShownHere")
-        copy_password_button = tk.Button(self,text = "Copy",command = self.copy_password)
+        show_password_frame = tk.Frame(self)
+        self.show_password_label = tk.Label(show_password_frame,text = "PasswordShownHere")
+        copy_password_button = tk.Button(show_password_frame,text = "Copy",command = self.copy_password)
         self.show_password_label.grid(row=3,column=0)
         copy_password_button.grid(row=3,column=1)
 
-        #Draw run button
+        show_password_frame.grid(row=3,column=0,sticky=tk.W, padx = 5, pady = 25)
+
+        #Draw buttons
+
+        button_frame = tk.Frame(self)
+
+        encrypt_tab = tk.Button(button_frame,text="Switch to encrypt",command=partial(self.controller.show_frame,"EncryptionPage"))
+        encrypt_tab.grid(row=2,column=1, padx = 25)
 
         run_command = partial(controller.run_program,
             "Decrypt",dest_entry_widget,password_entry,self.show_password_label
         )
 
-        run_button = tk.Button(self,text="RUN",command=run_command)
+        run_button = tk.Button(button_frame,text="RUN",command=run_command)
         run_button.grid(row=2,column=0,sticky=tk.W)
+
+        button_frame.grid(row=2,column=0,sticky=tk.W)
 
     def copy_password(self):
         label_text = self.show_password_label.cget('text')
