@@ -4,7 +4,11 @@ A prototype of a password manager that uses images to store user passwords/secre
 
 ![IPWM FlowChart](IPWM.png)
 
+# Running the program
+
 Compile: ```g++ main.cpp encrypt.cpp -o ipwm -I /usr/local/include/opencv4 -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs```
+
+Run TKGui after compiling, or use the below cmd arguments
 
 To encrypt: ```./ipwm [image_source] [image_dest] [secret] [password]```
 
@@ -19,8 +23,6 @@ encrypted_image: Image path - same as image_dest.
 secret: Data string that wants to be hidden. Number of chars must be less than the number of pixels in the image.
 
 password: Password to encrypt the string with.
-
-Can also run TkGui.py for a basic GUI.
 
 # Encryption
 Data is hidden by first encrypting the data using a viginere cipher, with the key generated from [password].
