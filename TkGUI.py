@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.filedialog   #crashes if not imported explicitly
 import os
+import subprocess
 from functools import partial
 
 class app(tk.Tk):
@@ -53,6 +54,30 @@ class app(tk.Tk):
         destination_widget.delete(0,tk.END)
         destination_widget.insert(0,path_to_file)
 
+    def run_program(self,type:str,*args):
+
+        print(type)
+        print(args)
+
+        if type == "Encrypt":
+
+            source,dest,secret,password = args
+
+            subprocess.run(["./ipwm",source.get(),dest.get(),secret.get(),password.get()])
+
+            print("Password Written")
+        
+        elif type == "Decrypt":
+
+            source,password,dest_widget = args
+
+            output = subprocess.run(["./ipwm",source.get(),password.get()], capture_output=True, text = True)
+
+            dest_widget.config(text = output.stdout)
+
+        else:
+            raise Exception
+
 
 class DecryptionPage(tk.Frame):
     def __init__(self:tk.Frame, parent: tk.Frame, controller:tk.Tk):
@@ -72,13 +97,10 @@ class DecryptionPage(tk.Frame):
 
         #Draw password entry
         password_label = tk.Label(self,text = "Password: ")
-        password_entry = tk.Entry(self,show="*")
+        password_entry = tk.Entry(self)
         password_label.grid(row=1,column=0,sticky=tk.W)
         password_entry.grid(row=1,column=1,sticky=tk.W)
 
-        #Draw run button
-        run_button = tk.Button(self,text="RUN")
-        run_button.grid(row=2,column=0,sticky=tk.W)
 
         encrypt_tab = tk.Button(self,text="Switch to encrypt",command=partial(self.controller.show_frame,"EncryptionPage"))
         encrypt_tab.grid(row=2,column=1)
@@ -87,6 +109,15 @@ class DecryptionPage(tk.Frame):
         copy_password_button = tk.Button(self,text = "Copy")
         show_password_label.grid(row=3,column=0)
         copy_password_button.grid(row=3,column=1)
+
+        #Draw run button
+
+        run_command = partial(controller.run_program,
+            "Decrypt",dest_entry_widget,password_entry,show_password_label
+        )
+
+        run_button = tk.Button(self,text="RUN",command=run_command)
+        run_button.grid(row=2,column=0,sticky=tk.W)
 
 
 class EncryptionPage(tk.Frame):
@@ -121,18 +152,23 @@ class EncryptionPage(tk.Frame):
 
         #Draw secret entry
         secret_label = tk.Label(self,text = "Secret: ")
-        secret_entry = tk.Entry(self,show="*")
+        secret_entry = tk.Entry(self)
         secret_label.grid(row = 3, column = 0, sticky=tk.W)
         secret_entry.grid(row=3,column=1,sticky=tk.W)
 
         #Draw password entry
         password_label = tk.Label(self,text = "Password: ")
-        password_entry = tk.Entry(self,show="*")
+        password_entry = tk.Entry(self)
         password_label.grid(row=4,column=0,sticky=tk.W)
         password_entry.grid(row=4,column=1,sticky=tk.W)
 
         #Draw run button
-        run_button = tk.Button(self,text="RUN")
+
+        run_command = partial(controller.run_program,
+            "Encrypt",source_entry_widget,dest_entry_widget,secret_entry,password_entry
+        )
+
+        run_button = tk.Button(self,text="RUN",command=run_command)
         run_button.grid(row=5,column=0,sticky=tk.W)
 
         #Tkinter tabs
