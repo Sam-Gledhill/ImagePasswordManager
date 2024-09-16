@@ -6,7 +6,9 @@ A prototype of a password manager that uses images to store user passwords/secre
 
 # Running the program
 
-Compile: ```g++ main.cpp encrypt.cpp -o ipwm -I [opencv4-dir] -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs```
+Note: These commands are linux specific
+
+Compile: ```g++ main.cpp encrypt.cpp -o ipwm -I /usr/local/include/opencv4 -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs```
 
 Run TKGui.py after compiling, or use the below cmd arguments
 
