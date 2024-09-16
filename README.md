@@ -20,6 +20,8 @@ secret: Data string that wants to be hidden. Number of chars must be less than t
 
 password: Password to encrypt the string with.
 
+Can also run TkGui.py for a basic GUI.
+
 # Encryption
 Data is hidden by first encrypting the data using a viginere cipher, with the key generated from [password].
 
