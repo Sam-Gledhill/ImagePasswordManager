@@ -142,50 +142,70 @@ class EncryptionPage(tk.Frame):
         self.controller = controller
 
         #Draw choose source
-        choose_source_label = tk.Label(self,text = "Choose Source: ")
-        source_entry_widget = tk.Entry(self)
+
+        source_frame = tk.Frame(self)
+
+        choose_source_label = tk.Label(source_frame,text = "Source Image: ")
+        source_entry_widget = tk.Entry(source_frame)
         source_entry_widget.insert(0,os.getcwd())
-        source_explorer_button = tk.Button(self,text = "File", command=partial(controller.select_file,source_entry_widget))
+        source_explorer_button = tk.Button(source_frame,text = "File", command=partial(controller.select_file,source_entry_widget))
 
         choose_source_label.grid(row = 1, column = 0, sticky = tk.W)
         source_explorer_button.grid(row = 1, column = 1, sticky = tk.W)
         source_entry_widget.grid(row = 1, column = 2, sticky = tk.W,ipadx=controller.entry_padding)
+        source_frame.grid(row=0,column=0,sticky=tk.W)
 
         #Draw choose dest
-        choose_dest_label = tk.Label(self,text = "Choose Dest: ")
-        dest_entry_widget = tk.Entry(self)
-        dest_entry_widget.insert(0,os.getcwd())
-        dest_explorer_button = tk.Button(self,text = "File", command=partial(controller.select_file,dest_entry_widget))
 
-        choose_dest_label.grid(row = 2, column = 0, sticky = tk.W)
-        dest_explorer_button.grid(row = 2, column = 1, sticky = tk.W)
-        dest_entry_widget.grid(row = 2, column = 2, sticky = tk.W,ipadx=controller.entry_padding)
+        dest_frame = tk.Frame(self)
+        choose_dest_label = tk.Label(dest_frame,text = "Dest Image: ")
+        dest_entry_widget = tk.Entry(dest_frame)
+        dest_entry_widget.insert(0,os.getcwd())
+        dest_explorer_button = tk.Button(dest_frame,text = "File", command=partial(controller.select_file,dest_entry_widget))
+
+        choose_dest_label.grid(row = 0, column = 0, sticky = tk.W)
+        dest_explorer_button.grid(row = 0, column = 1, sticky = tk.W)
+        dest_entry_widget.grid(row = 0, column = 2, sticky = tk.W,ipadx=controller.entry_padding)
+        
+        dest_frame.grid(row=1,column=0,sticky=tk.W)
+
 
         #Add button that shows/hides password entry.
 
         #Draw secret entry
-        secret_label = tk.Label(self,text = "Secret: ")
-        secret_entry = tk.Entry(self)
-        secret_label.grid(row = 3, column = 0, sticky=tk.W)
-        secret_entry.grid(row=3,column=1,sticky=tk.W,ipadx=controller.entry_padding)
+
+        secret_frame = tk.Frame(self)
+        secret_label = tk.Label(secret_frame,text = "Secret: ")
+        secret_entry = tk.Entry(secret_frame)
+        secret_label.grid(row = 0, column = 0, sticky=tk.W)
+        secret_entry.grid(row=0,column=1,sticky=tk.W)
+        secret_frame.grid(row=2,column=0,sticky=tk.W)
+
 
         #Draw password entry
-        password_label = tk.Label(self,text = "Password: ")
-        password_entry = tk.Entry(self)
-        password_label.grid(row=4,column=0,sticky=tk.W)
-        password_entry.grid(row=4,column=1,sticky=tk.W,ipadx=controller.entry_padding)
+        password_frame = tk.Frame(self)
+        password_label = tk.Label(password_frame,text = "Password: ")
+        password_entry = tk.Entry(password_frame)
+        password_label.grid(row=0,column=0,sticky=tk.W)
+        password_entry.grid(row=0,column=1,sticky=tk.W)
+        password_frame.grid(row=3,column=0,sticky=tk.W)
 
-        #Draw run button
+        #Draw buttons
+
+        button_frame = tk.Frame(self)
+
         run_command = partial(controller.run_program,
             "Encrypt",source_entry_widget,dest_entry_widget,secret_entry,password_entry
         )
 
-        run_button = tk.Button(self,text="RUN",command=run_command)
+        run_button = tk.Button(button_frame,text="RUN",command=run_command)
         run_button.grid(row=5,column=0,sticky=tk.W)
 
         #Tkinter tabs
-        encrypt_tab = tk.Button(self,text="Switch to decrypt",command=partial(self.controller.show_frame,"DecryptionPage"))
+        encrypt_tab = tk.Button(button_frame,text="Switch to decrypt",command=partial(self.controller.show_frame,"DecryptionPage"))
         encrypt_tab.grid(row=5,column=1)
+
+        button_frame.grid(row=4,column=0,sticky=tk.W,pady=10)
 
 
 
