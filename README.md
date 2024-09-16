@@ -41,7 +41,5 @@ In the current implementation the validity of the password is not tested, and th
 
 # Todo
 *  Add hashed+salted password to the image data so partial secrets can't be retrieved.
-*  Create GUI alternative to CLI. Use WxWidgets,QT5, or make a Tkinter/JS interface.
-*  Make the client arguments more fool-proof. Add more checks.
-*  Implement storing passwords within images within images in the C++ version.
+*  Make the cli arguments more fool-proof. Add more checks.
 
