@@ -63,8 +63,6 @@ class app(tk.Tk):
             source,dest,secret,password = args
 
             subprocess.run(["./ipwm",source.get(),dest.get(),secret.get(),password.get()])
-
-            print("Password Written")
         
         elif type == "Decrypt":
 
