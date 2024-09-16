@@ -41,5 +41,5 @@ main
 *.txt
 encrypt
 ipwm
-*.py
+python_prototype.py
 *.sh
