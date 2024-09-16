@@ -56,9 +56,6 @@ class app(tk.Tk):
 
     def run_program(self,type:str,*args):
 
-        print(type)
-        print(args)
-
         if type == "Encrypt":
 
             source,dest,secret,password = args
@@ -163,7 +160,6 @@ class EncryptionPage(tk.Frame):
         password_entry.grid(row=4,column=1,sticky=tk.W)
 
         #Draw run button
-
         run_command = partial(controller.run_program,
             "Encrypt",source_entry_widget,dest_entry_widget,secret_entry,password_entry
         )
