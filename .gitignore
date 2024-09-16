@@ -38,8 +38,7 @@
 *.webp
 main
 *.json
-*.txt
 encrypt
 ipwm
-*.py
+python_prototype.py
 *.sh
