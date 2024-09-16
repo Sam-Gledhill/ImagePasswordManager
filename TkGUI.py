@@ -47,6 +47,9 @@ class app(tk.Tk):
     def select_file(self, destination_widget: tk.Entry) -> None:
         path_to_file = tkinter.filedialog.askopenfilename(filetypes=[("png images", "*.png")])
         
+        if not path_to_file:
+            return
+
         destination_widget.delete(0,tk.END)
         destination_widget.insert(0,path_to_file)
 
